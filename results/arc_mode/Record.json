@@ -1,0 +1,30 @@
+{
+    "0001_01-0.jpg":{
+        "ID":0,
+        "ImagePath":"./align_arc/0001_01-0.jpg",
+        "ScoreSort":{
+            "mouth":0.24898036221590547,
+            "eyes":0.20192282077976204,
+            "skin":0.18104238930144784,
+            "nose":0.18082255567399128,
+            "hair":0.07573520957160756,
+            "eyebrows":0.061097006156139715
+        },
+        "GradCAMPath":"results/arc_mode/Img/0001_01-0.jpg/0001_01-0-gradcam.jpg",
+        "FacePartScorePath":"results/arc_mode/Img/0001_01-0.jpg/0001_01-0-part-score.jpg"
+    },
+    "0002_01-6.jpg":{
+        "ID":6,
+        "ImagePath":"./align_arc/0002_01-6.jpg",
+        "ScoreSort":{
+            "mouth":0.2875066157057045,
+            "skin":0.19556113839352351,
+            "nose":0.1685340892011106,
+            "eyebrows":0.1665819814110546,
+            "eyes":0.13130818899902555,
+            "hair":0.05513115019276438
+        },
+        "GradCAMPath":"results/arc_mode/Img/0002_01-6.jpg/0002_01-6-gradcam.jpg",
+        "FacePartScorePath":"results/arc_mode/Img/0002_01-6.jpg/0002_01-6-part-score.jpg"
+    }
+}
