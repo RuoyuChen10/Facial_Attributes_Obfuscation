@@ -3,12 +3,25 @@
         "ID":0,
         "ImagePath":"./align_arc/0001_01-0.jpg",
         "ScoreSort":{
-            "mouth":0.24898036221590547,
+            "lips":0.24898036221590547,
             "eyes":0.20192282077976204,
-            "skin":0.18104238930144784,
             "nose":0.18082255567399128,
             "hair":0.07573520957160756,
             "eyebrows":0.061097006156139715
+        },
+        "AttributePredictedScore":{
+            "Receding Hairline":0.00012148069072281942,
+            "Bushy Eyebrows":0.0008981103310361505,
+            "Arched Eyebrows":0.9069687128067017,
+            "Brown Eyes":0.002073029987514019,
+            "Big Nose":0.0005979518755339086,
+            "Pointy Nose":0.9935850501060486,
+            "Big Lips":0.6662814021110535
+        },
+        "AvtivatedAttribute":{
+            "Big Lips":0.24898036221590547,
+            "Pointy Nose":0.18082255567399128,
+            "Arched Eyebrows":0.061097006156139715
         },
         "GradCAMPath":"results/arc_mode/Img/0001_01-0.jpg/0001_01-0-gradcam.jpg",
         "FacePartScorePath":"results/arc_mode/Img/0001_01-0.jpg/0001_01-0-part-score.jpg"
@@ -17,12 +30,24 @@
         "ID":6,
         "ImagePath":"./align_arc/0002_01-6.jpg",
         "ScoreSort":{
-            "mouth":0.2875066157057045,
-            "skin":0.19556113839352351,
+            "lips":0.2875066157057045,
             "nose":0.1685340892011106,
             "eyebrows":0.1665819814110546,
             "eyes":0.13130818899902555,
             "hair":0.05513115019276438
+        },
+        "AttributePredictedScore":{
+            "Receding Hairline":0.5151872038841248,
+            "Bushy Eyebrows":0.06411407887935638,
+            "Arched Eyebrows":0.0003839035052806139,
+            "Brown Eyes":0.03719903156161308,
+            "Big Nose":0.00539022870361805,
+            "Pointy Nose":0.9190810322761536,
+            "Big Lips":0.002523610135540366
+        },
+        "AvtivatedAttribute":{
+            "Pointy Nose":0.1685340892011106,
+            "Receding Hairline":0.05513115019276438
         },
         "GradCAMPath":"results/arc_mode/Img/0002_01-6.jpg/0002_01-6-gradcam.jpg",
         "FacePartScorePath":"results/arc_mode/Img/0002_01-6.jpg/0002_01-6-part-score.jpg"

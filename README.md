@@ -37,10 +37,23 @@ than, you can view the results in the saved fold (default is [results](results))
         "ScoreSort":{
             "nose":0.8627879597363718,
             "eyes":0.8358434626789568,
-            "mouth":0.7089767999216268,
+            "lips":0.7089767999216268,
             "eyebrows":0.6859111387108845,
-            "skin":0.6761247350748167,
             "hair":0.2833600649095848
+        },
+        "AttributePredictedScore":{
+            "Receding Hairline":4.573714977595955e-05,
+            "Bushy Eyebrows":0.0004814813728444278,
+            "Arched Eyebrows":0.9603119492530823,
+            "Brown Eyes":0.0012451129732653499,
+            "Big Nose":0.00044564614654518664,
+            "Pointy Nose":0.9985511898994446,
+            "Big Lips":0.710470974445343
+        },
+        "AvtivatedAttribute":{
+            "Pointy Nose":0.8627879597363718,
+            "Big Lips":0.7089767999216268,
+            "Arched Eyebrows":0.6859111387108845
         },
         "GradCAMPath":"results/vgg_mode/Img/0001_01-0.jpg/0001_01-0-gradcam.jpg",
         "FacePartScorePath":"results/vgg_mode/Img/0001_01-0.jpg/0001_01-0-part-score.jpg"
@@ -48,6 +61,13 @@ than, you can view the results in the saved fold (default is [results](results))
     ...
 }
 ```
+
+Visualization:
+
+|||
+|-|-|
+|![](./results/vgg_mode/Img/0001_01-0.jpg/0001_01-0-gradcam.jpg)|![](./results/vgg_mode/Img/0002_01-6.jpg/0002_01-6-gradcam.jpg)|
+|![](./results/vgg_mode/Img/0001_01-0.jpg/0001_01-0-part-score.jpg)|![](./results/vgg_mode/Img/0002_01-6.jpg/0002_01-6-part-score.jpg)|
 
 ## Stage 2, Identity-aware face obfuscation
 

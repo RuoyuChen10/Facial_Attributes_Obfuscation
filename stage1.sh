@@ -7,6 +7,7 @@ python -m utils.score \
     --pre-trained ./pretrained/ArcFace-8631.pth \
     --cls-device cuda:0 \
     --seg-device cuda:0 \
+    --attr-device cuda:0\
     --save-dir results/arc_mode
 
 # VGGFace

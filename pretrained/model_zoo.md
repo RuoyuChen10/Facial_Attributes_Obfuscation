@@ -2,6 +2,10 @@
 
 > Note: Due to the recent repair of our server, we only have the pre-training model on the [VGGFace2](https://github.com/ox-vgg/vgg_face2) dataset, and the pre-training model on the [Celeb-A](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html) dataset cannot be provided for the time being. We will provide it after the server is repaired.
 
+## Attribute Net
+
+We release our pre-trained attribute net model called `Face-Attributes2.pth`, please download and put it to fold `pretrained`: [Google Drive link](https://drive.google.com/drive/folders/1upsYYgIzyzRuNEGCc7uPQ1AZ6NcHiPbD?usp=sharing).
+
 ## VGGFace Net
 
 First download the pre-trained model, the model is convert from coffee version from official file, don't worry it doesn't work.

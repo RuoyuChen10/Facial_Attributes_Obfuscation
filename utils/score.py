@@ -16,6 +16,7 @@ from collections import OrderedDict
 from models.vggface_models.resnet import resnet50
 from models.face_parser import FaceParser, read_img
 from models.iresnet import iresnet50, iresnet100
+from models.AttributeNet import AttributeNet
 from interpretability.grad_cam import GradCAM
 
 from tqdm import tqdm
@@ -25,6 +26,14 @@ transforms = transforms.Compose([
             transforms.ToTensor(),
             transforms.Normalize((0.5,0.5,0.5),(0.5,0.5,0.5))
         ])
+
+anonymized_hair = ["Receding Hairline"]
+anonymized_eyebrows = ["Bushy Eyebrows", "Arched Eyebrows"]
+anonymized_eye = ["Brown Eyes"] # Narrow_Eyes is only support on CelebA attribute, due to the machine hasn't repaired, it would be a replace and we will release soon.
+anonymized_nose = ["Big Nose", "Pointy Nose"]
+anonymized_lips = ["Big Lips"]
+anonymized_attribute = anonymized_hair + anonymized_eyebrows + anonymized_eye + anonymized_nose + anonymized_lips
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Train paramters.')
@@ -54,13 +63,18 @@ def parse_args():
     parser.add_argument('--seg-pre-trained', type=str,
                         default = "pretrained/FaceParser.ckpt",
                         help='')
+    parser.add_argument('--attr-pre-trained', type=str,
+                        default = "pretrained/Face-Attributes2.pth",
+                        help='')
     parser.add_argument('--device', type=str,
                         default='cuda',
                         choices=['cuda','cpu'],
                         help='')
     parser.add_argument('--cls-device', type=str, default="cuda:0",
                         help='GPU device')
-    parser.add_argument('--seg-device', type=str, default="cuda:1",
+    parser.add_argument('--seg-device', type=str, default="cuda:0",
+                        help='GPU device')
+    parser.add_argument('--attr-device', type=str, default="cuda:0",
                         help='GPU device')
     parser.add_argument('--save-dir', type=str, default="results/VGGFace2",
                         help='GPU device')
@@ -100,11 +114,20 @@ def define_backbone(mode, net_type, num_classes):
     return backbone
 
 def Path_Image_Preprocessing(image_path, mode="arcface"):
+    """Preprocessing method
+
+    Args:
+        image_path (_type_): Image path
+        mode (str, optional): You can choose arcface, vggface and attribute. Defaults to "arcface".
+
+    Returns:
+        _type_: _description_
+    """
     if mode == "arcface":
         data = Image.open(image_path)
         data = transforms(data)
         data = torch.unsqueeze(data,0)
-    elif mode == "vggface":
+    elif mode == "vggface" or mode == "attribute":
         mean_bgr = np.array([91.4953, 103.8827, 131.0912])
         image = cv2.imread(image_path)
         assert image is not None
@@ -299,9 +322,40 @@ def hierarchy_visualization(salience_map, image_path,
 def sort_face_part_score(face_part_score):
     tmp = sorted(face_part_score.items(), key = lambda kv:(kv[1], kv[0]), reverse=True)
     face_part_score = {}
+    part_sort = []
     for i in range(len(tmp)):
         face_part_score[tmp[i][0]] = tmp[i][1]
-    return face_part_score
+        part_sort.append(tmp[i][0])
+    return face_part_score, part_sort
+
+def compute_activated_attribute(face_part_score, part_sort, selected_attr_):
+    index = np.argwhere(selected_attr_ == True)
+    activated_attr_name = np.array(anonymized_attribute)[index.reshape(index.shape[0])]
+
+    avtivated_attribute = check_activated(face_part_score, part_sort, activated_attr_name)
+    return avtivated_attribute
+
+def check_activated(face_part_score, part_sort, activated_attr_name):
+    avtivated_attribute = {}
+    for part in part_sort:
+        part_list = return_list(part)
+        for activated_attr_name_ in activated_attr_name:
+            if activated_attr_name_ in part_list:
+                avtivated_attribute[activated_attr_name_] = face_part_score[part]
+    return avtivated_attribute
+
+def return_list(part):
+    if part == "hair":
+        return anonymized_hair
+    elif part == "eyebrows":
+        return anonymized_eyebrows
+    elif part == "eyes":
+        return anonymized_eye
+    elif part == "nose":
+        return anonymized_nose
+    elif part == "lips":
+        return anonymized_lips
+
 
 def main(args):
     # save path
@@ -312,12 +366,18 @@ def main(args):
     # different device
     cls_device = torch.device(args.cls_device)
     seg_device = torch.device(args.seg_device)
+    attr_device = torch.device(args.attr_device)
 
     # face recognition model
     recognition_net = load_face_recognition_model(args)
 
     # segmentation network
     segmentation_net = load_segmentation_model(args)
+
+    # attribute network
+    attribute_net = AttributeNet(pretrained = args.attr_pre_trained)
+    attribute_net.to(attr_device)
+    attribute_net.set_idx_list(attribute = anonymized_attribute)
 
     # Grad-CAM
     layer_name = get_last_conv_name(recognition_net)
@@ -346,8 +406,16 @@ def main(args):
         sub_json["ImagePath"] = image_path
 
         image = Path_Image_Preprocessing(image_path, args.mode)
+        image_attr = Path_Image_Preprocessing(image_path, "attribute")
         salience_map, id, scores = cam(image.to(cls_device))  # cam salience_map shape(112,112)
 
+        ### For Attribute
+        predicted_attr_results = attribute_net(image_attr.to(attr_device))
+        selected_attr_ = (predicted_attr_results[0] > 0.5).cpu().numpy()
+        attribute_score = {}
+        for i in range(len(anonymized_attribute)):
+            attribute_score[anonymized_attribute[i]] = predicted_attr_results[0][i].cpu().item()
+            
         #### For Segmentation
         image = read_img(image_path)
         parsed_face = segmentation_net(image.to(seg_device))
@@ -379,16 +447,19 @@ def main(args):
             mouth_score, hair_score, eyes_score, eyebrows_score, nose_score, skin_score)
 
         face_part_score = {}
-        face_part_score["mouth"] = mouth_score
+        face_part_score["lips"] = mouth_score
         face_part_score["eyebrows"] = eyebrows_score
         face_part_score["eyes"] = eyes_score
         face_part_score["hair"] = hair_score
         face_part_score["nose"] = nose_score
-        face_part_score["skin"] = skin_score
+        # face_part_score["skin"] = skin_score
 
-        face_part_score = sort_face_part_score(face_part_score)
+        face_part_score, part_sort = sort_face_part_score(face_part_score)
+        avtivated_attribute = compute_activated_attribute(face_part_score, part_sort, selected_attr_)
         
         sub_json["ScoreSort"] = face_part_score
+        sub_json["AttributePredictedScore"] = attribute_score
+        sub_json["AvtivatedAttribute"] = avtivated_attribute
 
         saliency_map_image_path = os.path.join(
             sub_img_save_dir, related_image_path.replace(".jpg", "-gradcam.jpg")
