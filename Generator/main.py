@@ -60,7 +60,7 @@ if __name__ == '__main__':
     parser.add_argument('--c2_dim', type=int, default=8, help='dimension of domain labels (2nd dataset)')
     parser.add_argument('--celeba_crop_size', type=int, default=178, help='crop size for the CelebA dataset')
     parser.add_argument('--rafd_crop_size', type=int, default=256, help='crop size for the RaFD dataset')
-    parser.add_argument('--image_size', type=int, default=128, help='image resolution')
+    parser.add_argument('--image_size', type=int, default=128*2, help='image resolution')
     parser.add_argument('--g_conv_dim', type=int, default=64, help='number of conv filters in the first layer of G')
     parser.add_argument('--d_conv_dim', type=int, default=64, help='number of conv filters in the first layer of D')
     parser.add_argument('--g_repeat_num', type=int, default=6, help='number of residual blocks in G')
@@ -97,8 +97,8 @@ if __name__ == '__main__':
     # Directories.
     parser.add_argument('--celeba_image_dir', type=str, default='data/celeba/images')
     parser.add_argument('--attr_path', type=str, default='data/celeba/list_attr_celeba.txt')
-    #parser.add_argument('--celeba_image_dir', type=str, default='data/vgg_face/images')
-    #parser.add_argument('--attr_path', type=str, default='data/vgg_face/list_att_vgg_face.txt')
+    # parser.add_argument('--celeba_image_dir', type=str, default='data/vgg_face/images')
+    # parser.add_argument('--attr_path', type=str, default='data/vgg_face/list_att_vgg_face.txt')
 
     parser.add_argument('--rafd_image_dir', type=str, default='data/RaFD/train')
     parser.add_argument('--log_dir', type=str, default='stargan/logs')

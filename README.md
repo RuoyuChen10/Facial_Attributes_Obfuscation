@@ -83,6 +83,20 @@ After obtaining the most important attribute region, modify according to this re
 
 The code for the generator is in the [Generator](./Generator) folder.
 
+Train Celeb-A:
+
+```shell
+cd Generator
+python main.py --mode train --celeba_image_dir data/celeba/images --attr_path data/celeba/list_attr_celeba.txt
+```
+
+Test:
+
+```shell
+cd Generator
+python main.py --mode test --celeba_image_dir data/celeba/images --attr_path data/celeba/list_attr_celeba.txt
+```
+
 <!-- In this part, you can directly use the official stargan v2, and combine the results obtained in the first stage for training and testing.
 
 [https://github.com/clovaai/stargan-v2](https://github.com/clovaai/stargan-v2)
