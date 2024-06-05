@@ -25,7 +25,7 @@ Please refer to [model_zoo.md](./pretrained/model_zoo.md) to download the pre-tr
 
 Please align all your face images before. If you want to use vggface net, try `mode=vggface`, if you want to use arcface net, try `mode=arcface`. See [tutorial_facealignment.ipynb](tutorial_facealignment.ipynb).
 
-Please refer to the manual of StarGAN v2 for installation environment
+Please refer to the manual of [StarGAN](https://github.com/yunjey/StarGAN) for installation environment
 
 ## 🗝️ Stage 1, Identity-aware region discovery
 
@@ -91,7 +91,7 @@ If you have any questions about this part of the operation, please contact me. -
 
 ## 👍 Acknowledgement
 
-[StarGAN v2](https://github.com/clovaai/stargan-v2/): a single image-to-image translation model.
+[StarGAN](https://github.com/yunjey/StarGAN): a single image-to-image translation model.
 
 [Sim2Word](https://github.com/RuoyuChen10/Sim2Word): a explanation method for face verification task.
 
